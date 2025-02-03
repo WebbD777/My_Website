@@ -3,6 +3,16 @@
 
 // Write your JavaScript code.
 
+function getSelectedRadioValue() {
+    const selectedRadio = document.querySelector('input[name="exampleRadios"]:checked');
+
+    if (selectedRadio) {
+        return selectedRadio.value;
+    } else {
+        return null; // Or handle the case where no radio button is selected.
+    }
+}
+
 function f(t, y) {
     var x, y, px
     var py = y
@@ -59,45 +69,81 @@ function rk4(f, x0, y0){
     return y0
 }
 
-xpos = []
-ypos = []
-pxMomentum = []
-pyMomentum = []
-
-xnext = 0
-ynext = 0.3
-pxnext = Math.sqrt(2 * (0.167) - (0.3 ** 2) + ((2 / 3) * (0.3 ** 3)) - 0 ** 2)
-pynext = 0
-
-xpos.push(xnext)
-ypos.push(ynext)
-pxMomentum.push(pxnext)
-pyMomentum.push(pynext)
-
 const data = [];
-for (let i = 0; i <= 1000; i++) {
+function plotChart() {
+    xpos = []
+    ypos = []
+    pxMomentum = []
+    pyMomentum = []
 
-    xnext = xnext + rk4(fx, xnext, pxnext)
-    ynext = ynext + rk4(fy, xnext, pynext)
-    pxnext = pxnext + rk4(fpx, xnext, ynext)
-    pynext = pynext + rk4(fpy, xnext, ynext)
+    xnext = 0
+    ynext = 0.3
+    pxnext = Math.sqrt(2 * (0.167) - (0.3 ** 2) + ((2 / 3) * (0.3 ** 3)) - 0 ** 2)
+    pynext = 0
+
     xpos.push(xnext)
     ypos.push(ynext)
     pxMomentum.push(pxnext)
     pyMomentum.push(pynext)
 
-    data.push({ x: xnext, y: ynext })
+    for (let i = 0; i <= 1000; i++) {
+
+        xnext = xnext + rk4(fx, xnext, pxnext)
+        ynext = ynext + rk4(fy, xnext, pynext)
+        pxnext = pxnext + rk4(fpx, xnext, ynext)
+        pynext = pynext + rk4(fpy, xnext, ynext)
+        xpos.push(xnext)
+        ypos.push(ynext)
+        pxMomentum.push(pxnext)
+        pyMomentum.push(pynext)
+
+        data.push({ x: xnext, y: ynext })
+
+    }
+
+    new Chart("starChart", {
+        type: "scatter",
+        data: {
+            // labels: xpos,
+            datasets: [{
+                data: data,
+                borderColor: "red",
+                fill: true
+            }]
+        }
+        //options: { ...}
+    });
+
+    xpos.length = 0;
+    ypos.length = 0;
+    pxMomentum.length = 0;
+    pyMomentum.length = 0;
+    data.length = 0;
 }
 
-new Chart("starChart", {
-    type: "scatter",
-    data: {
-       // labels: xpos,
-        datasets: [{
-            data: data,
-            borderColor: "red",
-            fill: true
-        }]
+
+const option1 = document.getElementById('exampleRadios1');
+const option2 = document.getElementById('exampleRadios2');
+const hiddenForm = document.getElementById('form');
+const submitButton = document.getElementById('submitBtn');
+
+// Add event listeners to both radio buttons (more robust)
+option1.addEventListener('change', handleRadioChange);
+option2.addEventListener('change', handleRadioChange);
+submitButton.addEventListener('click', submitButtonClicked )
+
+function submitButtonClicked() {
+    if (option1.checked) {
+        plotChart();
     }
-    //options: { ...}
-});
+}
+function handleRadioChange() {
+    if (option2.checked) {
+        hiddenForm.style.display = 'block'; // Show the form
+    } else {
+        hiddenForm.style.display = 'none'; // Hide the form
+    }
+}
+
+
+
