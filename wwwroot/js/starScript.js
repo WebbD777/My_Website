@@ -3,6 +3,12 @@
 
 // Write your JavaScript code.
 
+// Hide all things that need to be hidden
+const hiddenForm = document.getElementById('form');
+const xLabel = document.getElementById('xLabel'); 
+const xRange = document.getElementById('xRange');
+hiddenForm.style.display = 'none';
+
 function getSelectedRadioValue() {
     const selectedRadio = document.querySelector('input[name="exampleRadios"]:checked');
 
@@ -144,7 +150,7 @@ function drawGraph() {
 
 const option1 = document.getElementById('exampleRadios1');
 const option2 = document.getElementById('exampleRadios2');
-const hiddenForm = document.getElementById('form');
+
 const submitButton = document.getElementById('submitBtn');
 
 hiddenForm.style.display = 'none'; 
@@ -156,6 +162,11 @@ submitButton.addEventListener('click', submitButtonClicked )
 
 let starScatterPlot = new Chart();
 const ctx = document.getElementById('starChart').getContext('2d');
+
+xRange.addEventListener('input', function () {
+    xLabel.textContent = xRange.value; // Update label text
+    console.log(xRange.value);
+});
 
 function submitButtonClicked() {
     if (Chart.getChart("starChart")) {
