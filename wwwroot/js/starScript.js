@@ -70,6 +70,7 @@ function rk4(f, x0, y0){
 }
 
 const data = [];
+
 function plotChart() {
     xpos = []
     ypos = []
@@ -101,24 +102,43 @@ function plotChart() {
 
     }
 
-    new Chart("starChart", {
-        type: "scatter",
-        data: {
-            // labels: xpos,
-            datasets: [{
-                data: data,
-                borderColor: "red",
-                fill: true
-            }]
-        }
-        //options: { ...}
-    });
+/*    //Update the chart object
+    pieChart.data.datasets[0].data = updatedData;
+    //Update the chart
+    pieChart.update();
+*/
+    drawGraph();
 
     xpos.length = 0;
     ypos.length = 0;
     pxMomentum.length = 0;
     pyMomentum.length = 0;
     data.length = 0;
+    
+}
+
+function drawGraph() {
+
+        starScatterPlot = new Chart(ctx, {
+            type: "scatter",
+            data: {
+                // labels: xpos,
+                datasets: [{
+                    data: data,
+                    borderColor: "red",
+                    fill: true
+                }]
+            }
+            //options: { ...}
+        });
+
+
+/*    //Update the chart object
+    starScatterPlot.data.datasets[0].data = data;
+    //Update the chart
+    starScatterPlot.update();*/
+
+    
 }
 
 
@@ -127,13 +147,31 @@ const option2 = document.getElementById('exampleRadios2');
 const hiddenForm = document.getElementById('form');
 const submitButton = document.getElementById('submitBtn');
 
+hiddenForm.style.display = 'none'; 
+
 // Add event listeners to both radio buttons (more robust)
 option1.addEventListener('change', handleRadioChange);
 option2.addEventListener('change', handleRadioChange);
 submitButton.addEventListener('click', submitButtonClicked )
 
+let starScatterPlot = new Chart();
+const ctx = document.getElementById('starChart').getContext('2d');
+
 function submitButtonClicked() {
+    if (Chart.getChart("starChart")) {
+        Chart.getChart("starChart")?.destroy();
+/*        starScatterPlot.destroy(); // Destroy existing chart if any
+        starScatterPlot = null;*/
+    }
+
+    if (this.starScatterPlot) {
+       this.starScatterPlot.destroy();
+        /*        starScatterPlot.destroy(); // Destroy existing chart if any
+                starScatterPlot = null;*/
+    }
+
     if (option1.checked) {
+        
         plotChart();
     }
 }
