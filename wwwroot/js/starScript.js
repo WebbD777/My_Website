@@ -41,6 +41,9 @@ function getSelectedRadioValue() {
     }
 }
 
+/*
+All the equations 
+*/
 function f(t, y) {
     var x, y, px
     var py = y
@@ -97,8 +100,8 @@ function rk4(f, x0, yo){
     return yo
 }
 
-const data = [];
-
+let data = [];
+let momentumData = []
 function plotChart() {
     let xpos = []
     let ypos = []
@@ -115,7 +118,7 @@ function plotChart() {
     let pxnext = y0[2];//Math.sqrt(2 * (hRange.value) - (y0[1] ** 2) + ((2 / 3) * (y0[1] ** 3)) - y0[3] ** 2);
     let pynext = y0[3];
 
-    console.error("##$## : " + y0[0] + " " + y0[1] + " " + y0[2] + " " + y0[3])
+  console.error("##$## : " + y0[0] + " " + y0[1] + " " + y0[2] + " " + y0[3])
 
     xpos.push(xnext)
     ypos.push(ynext)
@@ -134,6 +137,7 @@ function plotChart() {
         pyMomentum.push(pynext)
 
         data.push({ x: xnext, y: ynext })
+        momentumData.push({ x: pxnext, y: pynext })
 
     }
 
@@ -149,6 +153,7 @@ function plotChart() {
     pxMomentum.length = 0;
     pyMomentum.length = 0;
     data.length = 0;
+    momentumData.length = 0;
    // y.length = 0;
     
 }
@@ -156,15 +161,22 @@ function plotChart() {
 function drawGraph() {
 
         starScatterPlot = new Chart(ctx, {
-            type: "scatter",
+            
             data: {
                 // labels: xpos,
                 datasets: [{
+                    type: "scatter",
                     label: 'Star position',
                     data: data,
                     borderColor: "red",
                     fill: true
-                }]
+                }/*, {
+                    type: "line",
+                    label: 'momentum position',
+                    data: momentumData,
+                    borderColor: "blue",
+                    fill: true
+                    }*/]
             }/*,
             options: {
                 scales: {
@@ -234,8 +246,8 @@ function submitButtonClicked() {
 
     if (option1.checked) {
 
-       // y0 = [0, 0.30266681750031454, 0.49057789051960615, -2.7003030887706725e-13];
-        y0 = [0, 0.3, 0.4219004621945797, 0];
+       y0 = [0, 0.30266681750031454, 0.49057789051960615, -2.7003030887706725e-13];
+       // y0 = [0, 0.3, 0.4219004621945797, 0];
         plotChart();
     }
     else if (option2.checked) {
